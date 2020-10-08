@@ -1,3 +1,14 @@
+body {
+  overflow: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .cell {
   font-size: 4rem;
   background: grey;
@@ -22,4 +33,13 @@
 
 .cell.failed {
   background: #db8f8f;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  width: 640px;
+  height: 480px;
+  gap: 2px;
 }
