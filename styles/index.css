@@ -43,3 +43,29 @@ body {
   height: 480px;
   gap: 2px;
 }
+
+.screen {
+  display: flex;
+  width: 640px;
+  height: 480px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.screen.green {
+  background: #a8db8f;
+}
+
+.screen.gray {
+  background: #dcdcdc;
+}
+
+.screen.red {
+  background: #db8f8f;
+}
+
+.screen h1 {
+  font-size: 3rem;
+}
+

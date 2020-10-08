@@ -7,7 +7,7 @@ import * as Cell from './Cell';
 // let board = [cell1, cell2, ..., celln];
 
 // VIEW
-export function View({ board, onClickAt }) {
+export function BoardView({ board, onClickAt }) {
   return (
     <div className="board">
       {board.map((cell, i) => (
@@ -15,4 +15,8 @@ export function View({ board, onClickAt }) {
       ))}
     </div>
   );
+}
+
+export function ScreenView({ className, children }) {
+  return <div className={`screen ${className}`}>{children}</div>;
 }
