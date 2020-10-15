@@ -5,6 +5,7 @@ import React from 'react';
 //   symbol: "A",
 //   status: Status.Open,
 // }
+
 export let Status = {
   Open: 'Open',
   Closed: 'Closed',
@@ -16,6 +17,7 @@ export let isOpen = (cell) => cell.status === Status.Open;
 export let isClosed = (cell) => cell.status === Status.Closed;
 export let isDone = (cell) => cell.status === Status.Done;
 export let isFailed = (cell) => cell.status === Status.Failed;
+export let isBlocking = (cell) => isOpen(cell) || isFailed(cell);
 
 //VIEW
 export function View({ cell, onClick }) {
@@ -30,7 +32,7 @@ export function View({ cell, onClick }) {
 
 export function classByStatus(status) {
   return status.toLowerCase();
-/*
+  /*
   switch (status) {
     case Status.Failed: return 'failed';
     case Status.Done: return 'done';

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import * as R from 'rambda';
+import React, { useEffect, useState } from 'react';
 import * as Cell from '../components/Cell';
 import * as Board from '../components/Board';
 
@@ -14,21 +15,47 @@ let Status = {
   Lost: 'Lost'
 };
 
-let startGame = (state) => ({ status: Status.Running });
+let initialBoard = [
+  { symbol: 'A', status: Cell.Status.Closed },
+  { symbol: 'A', status: Cell.Status.Closed },
+  { symbol: 'B', status: Cell.Status.Closed },
+  { symbol: 'B', status: Cell.Status.Closed },
+  { symbol: 'C', status: Cell.Status.Closed },
+  { symbol: 'C', status: Cell.Status.Closed }
+];
+
+const startGame = (state) => ({
+  board: initialBoard,
+  status: Status.Running
+});
+
+const openCell = R.curry((i, state) => ({
+  ...state,
+  board: Board.setStatusAt(i, Cell.Status.Open, state.board)
+}));
+
+const succeedStep = (state) => ({
+  ...state,
+  board: Board.setStatusesBy(Cell.isOpen, Cell.Status.Done, state.board)
+});
+
+const failStep1 = (state) => ({
+  ...state,
+  board: Board.setStatusesBy(Cell.isOpen, Cell.Status.Failed, state.board)
+});
+
+const failStep2 = (state) => ({
+  ...state,
+  board: Board.setStatusesBy(Cell.isFailed, Cell.Status.Closed, state.board)
+});
 
 function GameView() {
-  let [state, setState] = useState({ status: Status.Stopped });
+  let [state, setState] = useState({
+    board: initialBoard,
+    status: Status.Stopped
+  });
 
-  let { status } = state;
-
-  let cellOpen = { symbol: 'A', status: Cell.Status.Open };
-  let cellClosed1 = { symbol: 'B1', status: Cell.Status.Closed };
-  let cellClosed2 = { symbol: 'B1', status: Cell.Status.Closed };
-  let cellClosed3 = { symbol: 'B2', status: Cell.Status.Closed };
-  let cellFailed = { symbol: 'C', status: Cell.Status.Failed };
-  let cellDone = { symbol: 'D', status: Cell.Status.Done };
-
-  let board = [cellOpen, cellClosed1, cellClosed2, cellClosed3, cellFailed, cellDone];
+  let { board, status } = state;
 
   function handleStartingClick(i) {
     if (status != Status.Running) {
@@ -36,17 +63,37 @@ function GameView() {
     }
   }
 
+  function handleRunningClick(i) {
+    if (status === Status.Running) {
+      setState(openCell(i));
+    }
+  }
+
+  useEffect(
+    (_) => {
+      if (Board.areOpensEquel(board)) {
+        setState(succeedStep);
+      } else if (Board.areOpensDifferent(board)) {
+        setState(failStep1);
+        setTimeout((_) => {
+          setState(failStep2);
+        }, 500);
+      }
+    },
+    [board]
+  );
+
   return (
     <div onClick={handleStartingClick}>
-      <ScreenBoxView status={status} board={board} />
+      <ScreenBoxView status={status} board={board} onClickAt={handleRunningClick} />
     </div>
   );
 }
 
-function ScreenBoxView({ status, board }) {
+function ScreenBoxView({ status, board, onClickAt }) {
   switch (status) {
     case Status.Running:
-      return <Board.BoardView board={board} onClickAt={() => null} />;
+      return <Board.BoardView board={board} onClickAt={onClickAt} />;
 
     case Status.Stopped:
       return (
