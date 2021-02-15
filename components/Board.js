@@ -8,7 +8,7 @@ import * as Cell from './Cell';
 // let board = [cell1, cell2, ..., celln];
 
 export const getStatusAt = R.curry((i, board) => {
-  return R.set(R.lensPath(`${i}.status`), board);
+  return R.view(R.lensPath(`${i}.status`), board);
 });
 
 export const setStatusAt = R.curry((i, status, board) => {
@@ -20,6 +20,7 @@ export const setStatusesBy = R.curry((predFn, status, board) => {
 });
 
 export const getStatusesBy = R.curry((predFn, board) => {
+  // flatMap
   return R.chain((cell) => (predFn(cell) ? [cell.status] : []), board);
 });
 
@@ -32,7 +33,10 @@ export const getSymbolsBy = R.curry((predFn, board) => {
 
 export const canOpenAt = R.curry((i, board) => {
   return (
-    i < board.length && Cell.isClosed(board(i)) && getStatusesBy(Cell.isBlocking, board).length < 2
+    // eslint-disable-next-line prettier/prettier
+    i < board.length 
+      && Cell.isClosed(board[i]) 
+      && getStatusesBy(Cell.isBlocking, board).length < 2
   );
 });
 

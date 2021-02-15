@@ -24,11 +24,12 @@ let initialBoard = [
   { symbol: 'C', status: Cell.Status.Closed }
 ];
 
-const startGame = (state) => ({
+const startGame = () => ({
   board: initialBoard,
   status: Status.Running
 });
 
+// (i) => (state)
 const openCell = R.curry((i, state) => ({
   ...state,
   board: Board.setStatusAt(i, Cell.Status.Open, state.board)
@@ -57,7 +58,7 @@ function GameView() {
 
   let { board, status } = state;
 
-  function handleStartingClick(i) {
+  function handleStartingClick() {
     if (status != Status.Running) {
       setState(startGame);
     }
@@ -69,19 +70,16 @@ function GameView() {
     }
   }
 
-  useEffect(
-    (_) => {
-      if (Board.areOpensEquel(board)) {
-        setState(succeedStep);
-      } else if (Board.areOpensDifferent(board)) {
-        setState(failStep1);
-        setTimeout((_) => {
-          setState(failStep2);
-        }, 500);
-      }
-    },
-    [board]
-  );
+  useEffect(() => {
+    if (Board.areOpensEquel(board)) {
+      setState(succeedStep);
+    } else if (Board.areOpensDifferent(board)) {
+      setState(failStep1);
+      setTimeout((_) => {
+        setState(failStep2);
+      }, 500);
+    }
+  }, [board]);
 
   return (
     <div onClick={handleStartingClick}>
