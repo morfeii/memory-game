@@ -22,7 +22,7 @@ let initialBoard = [
 
 const startGame = () => ({
   board: initialBoard,
-  secondLeft: 60,
+  secondLeft: 5,
   status: Status.Running
 });
 
@@ -51,13 +51,18 @@ const failStep2 = (state) => ({
   board: Board.setStatusesBy(Cell.isFailed, Cell.Status.Closed, state.board)
 });
 
-let hasWinningCond = (state) => {
+const hasWinningCond = (state) => {
   return R.filter(Cell.isDone, state.board).length === state.board.length;
 };
 
-let hasLosingCond = (state) => !state.secondLeft;
+const hasLosingCond = (state) => !state.secondLeft;
 
 const setStatus = R.curry((status, state) => ({ ...state, status }));
+
+const nextSecond = (state) => ({
+  ...state,
+  secondLeft: Math.max(state.secondLeft - 1, 0)
+});
 
 // VIEW
 export function View() {
@@ -105,6 +110,16 @@ export function View() {
       }, 500);
     }
   }, [board]);
+
+  useEffect(() => {
+    let timer = null;
+    if (status === Status.Running && !timer) {
+      timer = setInterval(() => {
+        setState(nextSecond);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [status]);
 
   return (
     <div onClick={handleStartingClick}>
