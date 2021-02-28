@@ -52,6 +52,27 @@ export const areOpensDifferent = (board) => {
   return openSymbols.length >= 2 && !L.allEquals(openSymbols);
 };
 
+let charCodeA = 'A'.charCodeAt(0);
+
+export const makeRandom = (m, n) => {
+  if ((m * n) / 2 > 26) throw new Error('too big');
+  if ((m * n) % 2) throw new Error('must be even');
+
+  // ['A', 'B', 'A', 'B', 'C', 'C']
+
+  // ['A', 'B', 'C']
+  // ['A', 'A', 'B', 'B', 'C', 'C']
+  // [{symbol: 'A', status: 'closed'}, ...]
+
+  return R.pipe(
+    () => R.range(0, (m * n) / 2), // ['A', 'B', 'C']
+    R.map((i) => String.fromCharCode(i + charCodeA)),
+    R.chain((x) => [x, x]),
+    L.shuffle,
+    R.map((symbol) => ({ symbol, status: Cell.Status.Closed }))
+  )();
+};
+
 // VIEW
 export function BoardView({ board, onClickAt }) {
   return (

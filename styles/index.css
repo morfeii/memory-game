@@ -38,8 +38,8 @@ body {
 
 .board {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
   width: 640px;
   height: 480px;
   gap: 2px;

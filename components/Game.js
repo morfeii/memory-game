@@ -10,7 +10,7 @@ let Status = {
   Won: 'Won',
   Lost: 'Lost'
 };
-
+/* 
 let initialBoard = [
   { symbol: 'A', status: Cell.Status.Closed },
   { symbol: 'A', status: Cell.Status.Closed },
@@ -19,10 +19,10 @@ let initialBoard = [
   { symbol: 'C', status: Cell.Status.Closed },
   { symbol: 'C', status: Cell.Status.Closed }
 ];
-
+ */
 const startGame = () => ({
-  board: initialBoard,
-  secondLeft: 5,
+  board: Board.makeRandom(4, 3), // initialBoard
+  secondLeft: 30,
   status: Status.Running
 });
 
