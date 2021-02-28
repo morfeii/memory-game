@@ -57,7 +57,7 @@ export function BoardView({ board, onClickAt }) {
   return (
     <div className="board">
       {board.map((cell, i) => (
-        <Cell.View key={i} cell={cell} onClick={(_) => onClickAt(i)} />
+        <Cell.View key={i} cell={cell} onClick={() => onClickAt(i)} />
       ))}
     </div>
   );
