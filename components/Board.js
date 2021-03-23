@@ -76,14 +76,45 @@ export const makeRandom = (m, n) => {
 // VIEW
 export function BoardView({ board, onClickAt }) {
   return (
-    <div className="board">
-      {board.map((cell, i) => (
-        <Cell.View key={i} cell={cell} onClick={() => onClickAt(i)} />
-      ))}
-    </div>
+    <>
+      <div className="board">
+        {board.map((cell, i) => (
+          <Cell.View key={i} cell={cell} onClick={() => onClickAt(i)} />
+        ))}
+      </div>
+      <style jsx>{`
+        .board {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr 1fr;
+          grid-template-rows: 1fr 1fr 1fr;
+          width: 640px;
+          height: 480px;
+          gap: 2px;
+        }
+      `}</style>
+    </>
   );
 }
 
-export function ScreenView({ className, children }) {
-  return <div className={`screen ${className}`}>{children}</div>;
+export function ScreenView({ background, children }) {
+  return (
+    <>
+      <div className="screen">{children}</div>
+      <style jsx>{`
+        .screen {
+          display: flex;
+          width: 640px;
+          height: 480px;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          background: ${background};
+        }
+
+        :global(.screen h1) {
+          font-size: 2rem;
+        }
+      `}</style>
+    </>
+  );
 }

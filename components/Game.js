@@ -131,10 +131,20 @@ export function View() {
 
 function StatusLineView({ status, secondLeft }) {
   return (
-    <div className="status-line">
-      <div>{status == Status.Running ? ':)' : 'Lets go!'}</div>
-      <div className="timer">{status == Status.Running && `Second  left: ${secondLeft}`}</div>
-    </div>
+    <>
+      <div className="status-line">
+        <div>{status == Status.Running ? ':)' : 'Lets go!'}</div>
+        <div className="timer">{status == Status.Running && `Second  left: ${secondLeft}`}</div>
+      </div>
+      <style jsx>{`
+        .status-line {
+          color: gray;
+          display: flex;
+          justify-content: space-between;
+          font-size: 1.5rem;
+        }
+      `}</style>
+    </>
   );
 }
 
@@ -145,7 +155,7 @@ function ScreenBoxView({ status, board, onClickAt }) {
 
     case Status.Stopped:
       return (
-        <Board.ScreenView className="gray">
+        <Board.ScreenView background={statusToBackground(status)}>
           <div style={{ textAlign: 'center' }}>
             <h1>Memory Game</h1>
             <p>Click anywhere to start!</p>
@@ -155,7 +165,7 @@ function ScreenBoxView({ status, board, onClickAt }) {
 
     case Status.Won:
       return (
-        <Board.ScreenView className="green">
+        <Board.ScreenView background={statusToBackground(status)}>
           <div style={{ textAlign: 'center' }}>
             <h1>Victory!</h1>
             <p>Click anywhere to try again!</p>
@@ -165,12 +175,23 @@ function ScreenBoxView({ status, board, onClickAt }) {
 
     case Status.Lost:
       return (
-        <Board.ScreenView className="red">
+        <Board.ScreenView background={statusToBackground(status)}>
           <div style={{ textAlign: 'center' }}>
             <h1>Defeat!</h1>
             <p>Click anywhere to try again!</p>
           </div>
         </Board.ScreenView>
       );
+  }
+}
+
+function statusToBackground(status) {
+  switch (status) {
+    case Status.Won:
+      return '#a8db8f';
+    case Status.Lost:
+      return '#db8f8f';
+    default:
+      return '#dcdcdc';
   }
 }
